@@ -103,7 +103,6 @@ def showMyLists():
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 def sortList(choice, aList):
-
     #Not a caseless matching 
     #aList.sort()
     #printList(choice, aList)
@@ -116,9 +115,9 @@ def sortList(choice, aList):
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 def clearList(choice, aList):
-    aList.remove(choice)
+    #aList.remove(choice)
     aList.clear()
-    aList.append(choice)
+    aList.appAend(choice)
     return aList
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -158,18 +157,20 @@ def myLists():
         print("What do you want to do with '" + listChoice + "' ? Select a choice: \n 1) Add item to list \n 2) Remove item from list \n 3) Search for an item in the list \n 4) Display the list \n 5) Sort the list alphabetically \n 6) Save the list to a file \n 7) Clear the list \n 8) Delete the list \n 9) Go back to My Lists")
         userInput = input()
         userInput = userInput.strip()
+        # ADDING A LIST ITEM 
         if(userInput == "1"):
             print("Enter an item:")
             addMe = input()
             addMe = addMe.strip()
             if (addMe not in masterList[index]):
                 masterList[index].append(addMe)
-                if (addMe != masterList[index][0]):
-                    print(addMe + " was added to the list :D ")
-                else:
-                    print("Try something that's not the same title of the list....")
+                print(addMe + " was added to the list :D ")
             else:
-                print(str(addMe) + " is already in the list. Try something new.")
+                if(addMe == masterList[index][0]):
+                    print("Cannot add an item of same title as the list")
+                else:
+                    print(str(addMe) + " is already an item in the list. Try something new.")
+        # REMOVING AN ITEM FROM A LIST 
         elif(userInput == "2"):
             print("Enter an item to remove:")
             removeMe = input()
@@ -181,25 +182,30 @@ def myLists():
                 print(removeMe + " was removed from the list :D ")
             else:
                 print("We couldn't find " + removeMe + " in the " + listChoice + " list")
+        # SEARCH....
         elif(userInput== "3"):
             print("watcha lookin for?")
             findMe = input()
-            findMe = addMe.strip()
+            findMe = findMe.strip()
             if(findMe in masterList[index]):
                 print(findMe + " was found!")
             else:
                 print("We couldn't find " + findMe + " in the " + listChoice + " list")
+        # SHOW LIST
         elif(userInput == "4"):
             printList(listChoice, masterList[index])
+        # SORT LIST 
         elif(userInput == "5"):
             masterList[index] = sortList(listChoice, masterList[index])
+        # EXPORT OT FILE 
         elif(userInput == "6"):
             saveToFile(listChoice, masterList[index])
+        # QUITTIN TIME.... 
         elif(userInput == "7"):
-            print("Are you sure you want to clear '" + listChoice + "' ? Y/N")
-            userChoice = input()
             flag = 0
             while(flag == 0):
+                print("Are you sure you want to clear '" + listChoice + "' ? Y/N")
+                userChoice = input()
                 if(userChoice.upper().strip() == "Y"):
                     #masterList[index].clear()
                     clearList(listChoice, masterList[index])
@@ -208,7 +214,6 @@ def myLists():
                 elif(userChoice.upper().strip()== "N"):
                     print("Clear list aborted")
                     flag = 1 
-            continue
         elif(userInput == "8"):
             
             flag = 0
@@ -224,7 +229,6 @@ def myLists():
                 elif(userChoice.upper().strip()== "N"):
                     print("delete aborted")
                     flag = 1 
-            continue
         elif(userInput == "9"):
             myLists()
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
@@ -232,10 +236,10 @@ def myLists():
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 def startUp():
     global masterList
-    if(os.path.isfile("C:/Users/austb/OneDrive/Documents/JUSTCODE/myCodeProjects/Python/pythonDays/outfile")):
+    try:
         with open('outfile', 'rb') as fp:
             masterList = pickle.load(fp)
-    else:
+    except:
         print("Didn't find ya a file to load")
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
@@ -268,6 +272,8 @@ def mainProg():
             print("Goodbye, random user")
             shutDown()
             exit()
+        else:
+            print("Enter a valid letter from the menu")
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
